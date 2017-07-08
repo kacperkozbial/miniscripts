@@ -1,0 +1,66 @@
+# Skrypt na schowek v. 0.1 by imxkvpi 
+# imxkvpi © Copyright 2017
+
+options:
+
+	# Uprawnienie do zdjecia limitu
+	perm-admin: imxkvpi.schowek.admin
+	perm-omin: imxkvpi.limit.omin
+
+	# Wiadomosci
+
+on pickup:
+	if {limit::items} contains "%event-item%":
+		if amount of event-item in player's inventory is bigger than or equal to {limit::%event-item%}:
+			set amount of event-item in player's inventory to {_amount.inv}
+			remove {_amount.inv} event-item from player's inventory
+			subtract {limit::%event-item%} from {_amount.inv}
+			add {_amount.inv} to {schowek::%event-item%::%player%}
+			clear {_amount.inv}
+			add {limit::%event-item%} event-item to player's inventory
+			send "&cPosiadales za duza ilosc &8(&6%event-item%&8)" to player
+			stop
+		else:
+        	stop
+	else:
+		stop
+
+every a tick:
+	loop all players:
+		loop loop-player's inventory:
+			if {limit::items} contains "%loop-item%":
+				if amount of loop-item in loop-player's inventory is bigger than or equal to {limit::%loop-item%}:
+					set amount of loop-item in loop-player's inventory to {_amount.inv}
+					remove {_amount.inv} loop-item from loop-player's inventory
+					subtract {limit::%loop-item%} from {_amount.inv}
+					add {_amount.inv} to {schowek::%loop-item%::%loop-player%}
+					clear {_amount.inv}
+					add {limit::%loop-item%} loop-item to loop-player's inventory
+					send "&cPosiadales za duza ilosc &8(&6loop-item%&8)" to loop-player
+					send "&3Aby odzyskac przedmioty musisz uzyc &6/schowek" to loop-player
+					stop
+command /imxkvpi:schowek:
+	usage: /schowek
+	aliases: /schowek, /sch,
+	trigger:
+		open chest with 3 rows named "&8(&c&lSCH&6&lO&c&lWEK&8)" to player
+		loop {limit::items}:
+			set {_} to loop-value
+			loop {_} times:
+				format slot {_} + 1 of player with 1 of loop-item with lore "&8• &aLimit: &6%{limit::%loop-item%}%" to run [make player execute command "imxkvpi:odbierzitem %loop-item%"]
+
+command /imxkvpi:odbierzitem [<item>]:
+	usage: /odbierzitem
+	aliases: /odbierzitem, /odbitem
+	trigger:
+		if amount of item-arg is smaller than {limit::%item-arg%}:
+			send "&cPrzekazujemy itemy do odbioru... &8(&6Wait..&8)"
+			wait 2.22 seconds
+			send "&aPrzesylka zostanie dostarczona za chwile..."
+			wait 0.69 seconds
+			add {schowek::%item-arg%::%player%} item-arg to player's inventory
+			clear {schowek::%item-arg%::%player%}
+			stop
+		else:
+			send "&3Posiadasz zbyt wiele &8(&6%item-arg%&8) &3 w ekwipunku"
+			stop

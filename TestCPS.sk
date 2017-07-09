@@ -1,0 +1,69 @@
+# [ // script \\ ]
+# name: testCPS
+# version: 0.1
+# made by: esej
+# date: 09.07.2017 [21:49]
+# [ // script \\ ]
+
+options:
+
+	# Czas pomiaru CPS
+	test time: 5 
+
+	# Dozwolona ilosc CPS
+	allowed-cps: 60
+every second:
+	loop all players:
+		if {checkCPS::%loop-player%} is true:
+			if {checkCPS::timer::%loop-player%} > 0:
+				remove 1 from {checkCPS::timer::%loop-player%}
+				if {checkCPS::timer::%loop-player%} = 0:
+					set {checkCPS::%loop-player%} to false
+					send "&8» &cPomiar zakonczony... Za chwile wyniki!" to loop-player
+					testCPS(loop-player , {checkCPS::admin::%loop-player%})
+					stop
+command /esej:clickpersecond [<text>] [<text="{@test time}">]:
+	description: Skrypt umozliwiajacy pomiar CPS
+	permission: esej.testCPS
+	permission message: &4Nie posiadasz uprawnien
+	aliases: /clickpersecond, /cps, /checkcps, /testcps,
+	trigger:
+		if argument 1 is a player:
+			if argument 1 parsed as player is online:
+				if argument 2 is set:
+					if argument 2 is integer:
+						send "&8» &6Pomiar CPS za chwile zostanie rozpoczety.." to the argument 1 parsed as player
+						send "&8» &6Rozpoczynasz pomiar CPS" to the player
+						wait 4 seconds
+						loop 4 times:
+							send "&8» &6%loop-time%" to the player
+							send "&8» &6%loop-time%} to the argument 1 parsed as player
+						loop 2 times:
+							send "&8» &c%loop-time%" to the player
+							send "&8» &c%loop-time%" to the argument 1 parsed as player
+						set {checkCPS::%argument 1 parsed as player%} to true
+						set {checkCPS::timer::%argument 1 parsed as player} to argument 2
+						set {checkCPS::admin::%argument 1 parsed as player} to the player
+						send "&8» &aSTART!" to the argument 1 parsed as player
+						wait 0.01 seconds
+						send "&8» &aSTART!" to the player
+						stop
+					else:
+						send "&8» &4Error: &cArgument 2 isn't integer" to the player
+				else:
+					send "&8» &4Error: &cArgument 2 isn't set" to the player
+			else:
+				send "&8» &4Blad: &cPodany gracz jest &7offline" to the player
+		if argument 1 is "setmax":
+			argument 2 is integer:
+				set {maxcps} to argument 2 parsed as integer
+				send "&8» &aZmieniles maksymalna ilosc CPS" to the player
+			else:
+				send "&8» &cArgument 2 to musi byc liczba" to the player
+		if argument 1 is "author" or "autor":
+			send "&8» &3Autorem skryptu jest: &6&l&oesej" to the player
+			stop
+function testCPS(p: player , p2: string):
+	set {cps::%{_p}%} to {_click}/{checkCPS::timer::%{_p}%}
+	send "&8» &6CPS: &3%{cps::%{_p}%}%" to {_p}
+	send "&8» &cCPS: &3%{cps::%{_p}%}%" to {_p2}

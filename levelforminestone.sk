@@ -70,7 +70,7 @@ on mine of stone:
 		broadcast "&8» &c%player% &czdobyl najwyzsza range &8» &3'{@prefix10}'"
 		broadcast "&8» &3Pogratulujmy mu! &6Wszyscy!"
 		broadcast "&8» &6Wykopal &c&l%{mined::stone::%player%}% &7kamienia &8«"
-command /esej:setlevel [<offlineplayer>] [<integer>]:
+command /esej:setlevel [<player>] [<integer>]:
 	permission: esej.mine.level
 	permission message: &cNie posiadasz uprawnien &8(&cesej.mine.level&8)
 	aliases: /setlevel, /setlvl, /ustawpoziom, /ustawlvl

@@ -1,0 +1,83 @@
+# Skrypt o nazwie 'ColorChat' dodający kolorowanie wiadomości oraz nicków graczy.
+# Wersja skryptu: 0.1
+# Twórca; esej
+# Życzę miłego korzystania ze skryptu.
+
+command /esej:randomcolor [<text="change"]:
+	permission: randomcolor.change
+	permission message: &4Nie posiadasz uprawnien
+	description: Zmiana kolorow
+	aliases: /randomcolor, /randomcolour, /color-ran, /rc
+	trigger:
+		if argument 1 is "change":
+			if {randomcolor.%player%} is true:
+				set {randomcolor.%player%} to false
+				message "&cWylaczono kolory chatu"
+			else:
+				set {randomocolor.%player%} to true
+				message "&aWlaczono kolory chatu"
+		if argument 1 is "on":
+			set {randomcolor.%player%} to true
+			message "&aEnable colour of chat"
+		if argument 1 is "off":
+			set {randomcolor.%player%} to false
+			message "&cDisable colour of chat"
+		if argument 1 is not "change" or "off" or "on":
+			message "&4Blad: &cMozliwe argumenty: &6'change', 'off', 'on'"
+			stop
+on chat:
+	{randomcolor.%player%} is true:
+		
+		# Wiadomosc
+
+		replace all "a" with "&aa" in message
+		replace all "b" with "&bb" in message
+		replace all "c" with "&cc" in message
+		replace all "d" with "&dd" in message
+		replace all "e" with "&ee" in message
+		replace all "f" with "&ff" in message
+		replace all "g" with "&1g" in message
+		replace all "h" with "&9h" in message
+		replace all "i" with "&ii" in message
+		replace all "j" with "&3j" in message
+		replace all "k" with "&kk" in message
+		replace all "l" with "&ll" in message
+		replace all "m" with "&mm" in message
+		replace all "n" with "&2n" in message
+		replace all "o" with "&oo" in message
+		replace all "p" with "&5p" in message
+		replace all "r" with "&rr" in message
+		replace all "s" with "&7s" in message
+		replace all "t" with "&8t" in message
+		replace all "u" with "&4u" in message
+		replace all "w" with "&6w" in message
+		replace all "x" with "&0x" in message
+		replace all "y" with "&cy" in message
+		replace all "z" with "&dz" in message
+		
+		# Nick
+
+		replace all "a" with "&aa" in player's displayname
+		replace all "b" with "&bb" in player's displayname
+		replace all "c" with "&cc" in player's displayname
+		replace all "d" with "&dd" in player's displayname
+		replace all "e" with "&ee" in player's displayname
+		replace all "f" with "&ff" in player's displayname
+		replace all "g" with "&1g" in player's displayname
+		replace all "h" with "&9h" in player's displayname
+		replace all "i" with "&ii" in player's displayname
+		replace all "j" with "&3j" in player's displayname
+		replace all "k" with "&kk" in player's displayname
+		replace all "l" with "&ll" in player's displayname
+		replace all "m" with "&mm" in player's displayname
+		replace all "n" with "&2n" in player's displayname
+		replace all "o" with "&oo" in player's displayname
+		replace all "p" with "&5p" in player's displayname
+		replace all "r" with "&rr" in player's displayname
+		replace all "s" with "&7s" in player's displayname
+		replace all "t" with "&8t" in player's displayname
+		replace all "u" with "&4u" in player's displayname
+		replace all "w" with "&6w" in player's displayname
+		replace all "x" with "&0x" in player's displayname
+		replace all "y" with "&cy" in player's displayname
+		replace all "z" with "&dz" in player's displayname

@@ -1,0 +1,38 @@
+# [ / skript ]
+# name: QandA
+# version: 0.1
+# creator: esej
+options:
+	l: &9[PYTANIE] #Tag
+	wiad1: {@l} &6Gracz &9%player% &6odpowiedzial jako pierwszy
+	wiad2: {@l} &6Odpowiedz to &9%{x}%
+	perm: pytaj.*
+	item: enchanted golden apple
+variables:
+	odp = true
+	x = "odpowiedz"
+command /pytanie [<text>] [<text>]:
+	trigger:
+		if player has permission "{@perm}":
+			if arg 1 is set:
+				if arg 2 is set:
+					set {odp} to "false"
+					set {x} to "%arg 2%"
+					replace all "_" with " " in command
+					broadcast "{@l} &6%arg 1%"
+				else:
+					send "&4Podaj odpowiedz"
+			else:
+				send "&4Podaj pytanie"
+		else:
+			send "&cNie posiadasz permisji &8(&6{@perm}&8)"
+on chat:
+	if {odp} is "false":
+		if message contains "%{x}%":
+			cancel event
+			set {odp} to "true"
+			broadcast "{@wiadodp}"
+			broadcast "{@wiadodp2}"
+			loop all players:
+				execute console command "playsound mob.wither.spawn %loop-player%"
+			add 1 {@item} to player's inventory

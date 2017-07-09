@@ -21,7 +21,7 @@ on pickup:
 			send "&cPosiadales za duza ilosc &8(&6%event-item%&8)" to player
 			stop
 		else:
-        	stop
+			stop
 	else:
 		stop
 
@@ -82,4 +82,4 @@ command /esej:receiveitem [<item>]:
 		else:
 			send "&3Posiadasz zbyt wiele &8(&6%item-arg%&8) &3 w ekwipunku"
 			stop
-# Possible is that skript not working!
+# Possible is that skript not working..

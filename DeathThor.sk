@@ -1,0 +1,10 @@
+# [ // Script \\ ]
+# name: DeathThor]
+# version: 0.1   ]
+# creator: esej  ]
+# [ \\ Script // ]
+
+on death of player:
+	strike lightning effect at event-location
+	
+# Skrypt nie będzie już aktualizowany.

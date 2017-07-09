@@ -1,0 +1,68 @@
+# [ // script ' \\ ]
+# name: intercom   ]
+# version: 1.1     ]
+# creator: esej    ]
+# [ \\ script ' // ]
+
+options:
+
+	# ustawienia #
+
+	# Domofon #
+	dzwonek: random.pop #Lista dzwiekow: bedzie w temacie
+
+	# Uprawnienia #
+	uprawnienie do odbierania domofonu: intercom.answer
+
+	uprawnienie do wpuszczania graczy: intercom.let
+
+	uprawnienie do komendy intercom: intercom.command
+
+	#Intercom - komenda
+
+	# aliasy dotyczace komendy /intercom
+	alias: /interc, /inter, /comi, /icom,
+first connect:
+	{status::gracz::%player%} = "zweryfikowany":
+		message "&aWitamy :)"
+		stop trigger
+	else:
+		kick player due to "&cMusisz chwile zaczekac az administracja cie wpusci na serwer."
+		loop all players:
+			loop-player has permission "{@uprawnienie do odbierania domofonu}":
+				play raw sound "{@dzwonek}" at loop-player with pitch 1 volume 10
+				message "&6Gracz &7%player% &6dzwoni! &cProsba o dolaczenie na serwer." to loop-player
+			loop-player has permission "{@uprawnienie do wpuszczania graczy}":
+				play raw sound "{@dzwonek}" at loop-player with pitch 1 volume 10
+				message "&6Gracz &7%player% &cprobuje wejsc na serwer." to loop-player
+				message "&7Aby go wpuscic:" to loop-player
+				message "&6wpisz &a/intercom <nick> tak" to loop-player
+				message "&7Aby ustawic powod braku pozwolenia:" to loop-player
+				message "&6wpisz &c/intercom <nick> <powod>" to loop-player
+command /intercom [<text>] [<text>]:
+	aliases: {@alias}
+	trigger:
+		if player has permission {@uprawnienie do komendy intercom}:
+			arg 1 is "tak":
+				arg 2 is player:
+					set {status::gracz::%arg 2 parsed as player%} to "zweryfikowany"
+					message "&aPomyslnie zweryfikowano gracza %arg 2 parsed as player%"
+			arg 1 is player:
+				arg 2 is set:
+					arg 2 is not player:
+						set {status::gracz::%arg 1 parsed as player%} to "blokada"
+						set {domofon::ban::%arg 1 parsed as player%} to "%arg 2%"
+						message "&cPomyslnie zmieniono powod blokady dolaczania dla gracza &6%arg 1 parsed as player%"
+					else:
+						message "&cW tym miejscu wpisujesz powod: &7/intercom &6<nick> &c<powod>"
+				else:
+					set {status::gracz::%arg 1 parsed as player%} to "blokada"
+					set {domofon::ban::%arg 1 parsed as player%} to "brak"
+			else:
+				message "&cW tym miejscu wpisujesz nick: &7/intercom &c<nick> &6<powod>"
+connect:
+	{status::gracz::%player%} = "blokada":
+		kick player due to "&cMasz blokade na dolaczanie na serwer!%nl%&7Powod: &6%{domofon::ban::%player%}%"
+		stop
+	else:
+		message "&aWitamy ponownie :)"

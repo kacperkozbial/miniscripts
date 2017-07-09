@@ -1,0 +1,115 @@
+# [ // script \\ ]
+# name: LFMS (LevelForMineStone)
+# version: 0.1
+# creator: Kacper K. 'esej'
+# [ \\ script // ]
+
+options:
+
+	cobble1: 64
+	pref1: &bSwiezak I
+
+	cobble2: 128
+	pref2: &3Swiezak II
+
+	cobble3: 256
+	pref3: &6Swiezak III
+
+	cobble4: 512
+	pref4: &ePoczatkujacy I
+
+	cobble5: 1024
+	pref5: &2Poczatkujacy II
+
+	cobble6: 2048
+	pref6: &4Poczatkujacy III
+
+	cobble7: 4096
+	pref7: &4Zaawansowany I
+
+	cobble8: 8192
+	pref8: &cZaawansowany II
+
+	cobble9: 16384
+	pref9: &3Zaawansowany III
+
+	cobble10: 32768
+	pref10: &8[» &cZAAWANSOWANY &8«]
+
+on mine of stone:
+	add 1 to {mined::stone::%player%}
+	if {mined::stone::%player%} = "{@cobble1}":
+		set player's prefix to "{@prefix1}"
+		send "&8» &c%player% &czdobyl nowa range &8» &3'{@prefix1}'" to all players
+	if {mined::stone::%player%} = "{@cobble2}":
+		set player's prefix to "{@prefix2}"
+		send "&8» &c%player% &czdobyl nowa range &8» &3'{@prefix2}'" to all players
+	if {mined::stone::%player%} = "{@cobble3}":
+		set player's prefix to "{@prefix3}"
+		send "&8» &c%player% &czdobyl nowa range &8» &3'{@prefix3}'" to all players
+	if {mined::stone::%player%} = "{@cobble4}":
+		set player's prefix to "{@prefix4}"
+		send "&8» &c%player% &czdobyl nowa range &8» &3'{@prefix4}'" to all players
+	if {mined::stone::%player%} = "{@cobble5}":
+		set player's prefix to "{@prefix5}"
+		send "&8» &c%player% &czdobyl nowa range &8» &3'{@prefix5}'" to all players
+	if {mined::stone::%player%} = "{@cobble5}":
+		set player's prefix to "{@prefix6}"
+		send "&8» &c%player% &czdobyl nowa range &8» &3'{@prefix6}'" to all players
+	if {mined::stone::%player%} = "{@cobble6}":
+		set player's prefix to "{@prefix7}"
+		send "&8» &c%player% &czdobyl nowa range &8» &3'{@prefix7}'" to all players
+	if {mined::stone::%player%} = "{@cobble7}":
+		set player's prefix to "{@prefix8}"
+		send "&8» &c%player% &czdobyl nowa range &8» &3'{@prefix8}'" to all players
+	if {mined::stone::%player%} = "{@cobble8}":
+		set player's prefix to "{@prefix9}"
+		send "&8» &c%player% &czdobyl nowa range &8» &3'{@prefix9}'" to all players
+	if {mined::stone::%player%} = "{@cobble9}":
+		set player's prefix to "{@prefix10}"
+		broadcast "&8» &c%player% &czdobyl najwyzsza range &8» &3'{@prefix10}'"
+		broadcast "&8» &3Pogratulujmy mu! &6Wszyscy!"
+		broadcast "&8» &6Wykopal &c&l%{mined::stone::%player%}% &7kamienia &8«"
+command /esej:setlevel [<offlineplayer>] [<integer>]:
+	permission: esej.mine.level
+	permission message: &cNie posiadasz uprawnien &8(&cesej.mine.level&8)
+	aliases: /setlevel, /setlvl, /ustawpoziom, /ustawlvl
+	usage: /setlevel <nick>
+	trigger:
+		if integer-argument is > 10:
+			send "&8» &4Error: &clevel is bigger than maximum &8«" to the player
+			stop
+		else:
+			set {_level} to integer-argument
+			if {_level} is 1:
+				set {mined::stone::%player-argument%} to "{@cobble1}"
+				set player-argument's prefix to "{@prefix1}"
+			if {_level} is 2:
+				set {mined::stone::%player-argument%} to "{@cobble2}"
+				set player-argument's prefix to "{@prefix2}"
+			if {_level} is 3:
+				set {mined::stone::%player-argument%} to "{@cobble3}"
+				set player-argument's prefix to "{@prefix3}"
+			if {_level} is 4:
+				set {mined::stone::%player-argument%} to "{@cobble4}"
+				set player-argument's prefix to "{@prefix4}"
+			if {_level} is 5:
+				set {mined::stone::%player-argument%} to "{@cobble5}"
+				set player-argument's prefix to "{@prefix5}"
+			if {_level} is 6:
+				set {mined::stone::%player-argument%} to "{@cobble6}"
+				set player-argument's prefix to "{@prefix6}"
+			if {_level} is 7:
+				set {mined::stone::%player-argument%} to "{@cobble7}"
+				set player-argument's prefix to "{@prefix7}"
+			if {_level} is 8:
+				set {mined::stone::%player-argument%} to "{@cobble8}"
+				set player-argument's prefix to "{@prefix8}"
+			if {_level} is 9:
+				set {mined::stone::%player-argument%} to "{@cobble9}"
+				set player-argument's prefix to "{@prefix9}"
+			if {_level} is 10:
+				set {mined::stone::%player-argument%} to "{@cobble10}"
+				set player-argument's prefix to "{@prefix10}"
+			send "&8» &aPomyslnie &6ustawiono level" to the player
+			stop

@@ -1,6 +1,6 @@
 # [ // script \\ ]
 # name: testCPS
-# version: 0.1
+# version: 0.2
 # made by: esej
 # date: 09.07.2017 [21:49]
 # [ // script \\ ]
@@ -9,9 +9,7 @@ options:
 
 	# Czas pomiaru CPS
 	test time: 5 
-
-	# Dozwolona ilosc CPS
-	allowed-cps: 60
+	
 every second:
 	loop all players:
 		if {checkCPS::%loop-player%} is true:
@@ -62,7 +60,7 @@ command /esej:clickpersecond [<text>] [<text="{@test time}">]:
 				send "&8» &cArgument 2 to musi byc liczba" to the player
 		if argument 1 is "author" or "autor":
 			send "&8» &3Autorem skryptu jest: &6&l&oesej" to the player
-			stop
+			stop  
 function testCPS(p: player , p2: string):
 	set {cps::%{_p}%} to {_click}/{checkCPS::timer::%{_p}%}
 	send "&8» &6CPS: &3%{cps::%{_p}%}%" to {_p}

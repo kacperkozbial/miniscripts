@@ -1,0 +1,14 @@
+# FixChat for Minecraft 1.8
+# creator: esej
+# version: 0.1
+on chat:
+	player has permission "chat.root":
+		cancel event
+		broadcast "&8[&4ROOT&8] &6%player% &8> &3%message%"
+	player has permission "chat.admin":
+		cancel event
+		broadcast "&8[&cA&8] &6%player%&8: &f%message%"
+	player has permission "chat.moderator":
+		cancel event
+		broadast "&8[&2Moderator&8] &f%player% &9> &3%message%"
+	stop

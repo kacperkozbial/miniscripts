@@ -1,0 +1,68 @@
+# [ // script \\ ]
+# name: esejAdminChat
+# version: 0.1
+# creator: esej
+# [ \\ script // ]
+options:
+
+	tag-mod: &8[&9&l»&8]&r
+	tag-perm: esej.adminchat.switch.mod
+
+	tag-admin: &8[&4&lAC&8]&r
+	perm-admin: esej.adminchat.switch.admin
+
+variables:
+	{adminchat::%player%} = "false"
+	{adminchat::moderator::%player%} = "false"
+	{adminchat::group} = ""
+	{adminchat::moderator::group} = ""
+on load:
+	if folder "plugins/AdminChat/" doesn't exists:
+		create folder "plugins/AdminChat"
+		stop
+	if file "plugins/AdminChat/log.yml" doesn't exists:
+		create file "plugins/AdminChat/log.yml"
+		stop
+command /ac:
+	trigger:
+		if player don't have permission "{@perm-admin}" or "{@perm-mod}":
+			send "&8» &cNie posiadasz uprawnien &8(&7{@perm-admin} / {@perm-mod}&8)
+			stop
+		if player has permission "{@perm-admin}":
+			if {adminchat::%player%} is false:
+				set {adminchat::%player%} to true
+				add player to {adminchat::group}
+				send "&8» &4AC &9zostal &awlaczony" to the player
+				send "{@tag-admin} &9Do &4AC &9dolacza %player%" to the {adminchat::group}
+				wf "[%now%] (%player%) : dolacza do AC" to "plugins/AdminChat/log.yml"
+				stop
+			else if {adminchat::%player%} is true:
+				set {adminchat::%player%} to false
+				remove player from {adminchat::group}
+				send "&8» &4AC &9zostal &cwylaczony" to the player
+				send "{@tag-admin} &9%player% odlacza sie od &4AC" to the {adminchat::group}
+				wf "[%now%] (%player%) : wychodzi z AC" to "plugins/AdminChat/log.yml"
+				stop
+		if player has permission "{@perm-mod}":
+			if {adminchat::moderator::%player%} is false:
+				set {adminchat::moderator::%player%} to true
+				add player to {adminchat::moderator::group}
+				send "&8» &4AC &9zostal &awlaczony" to the player
+				send "{@tag-admin} &9Do &4AC &9dolacza %player%" to the {adminchat::moderator::group}
+				wf "[%now%] (%player%) : dolacza do AC MOD" to "plugins/AdminChat/log.yml"
+				stop
+			else if {adminchat::moderator::%player%} is true:
+				set {adminchat::moderator::%player%} to false
+				remove player from {adminchat::moderator::group}
+				send "&8» &4AC MOD &9zostal &cwylaczony" to the player
+				send "{@tag-mod} &9%player% odlacza sie od &4AC MOD" to the {adminchat::moderator::group}
+				wf "[%now%] (%player%) : wychodzi z AC MOD" to "plugins/AdminChat/log.yml"
+				stop
+on chat:
+	if {adminchat::moderator::%player%} is true:
+		cancel event
+		send "{@tag-mod} &8(&a%player%&8) &6► &9%message% &8•" to {adminchat::moderator::group}
+		stop
+	if {adminchat::%player%} is true:
+		cancel event
+		send "{@tag-admin} &8(&c%player%&8) &6» &9%message% &8•" to {adminchat::group}

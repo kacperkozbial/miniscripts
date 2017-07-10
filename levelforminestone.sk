@@ -1,40 +1,40 @@
 # [ // script \\ ]
 # name: LFMS (LevelForMineStone)
-# version: 0.1
+# version: 0.2
 # creator: Kacper K. 'esej'
 # [ \\ script // ]
 
 options:
 
 	cobble1: 64
-	pref1: &bSwiezak I
+	prefix1: &bSwiezak I
 
 	cobble2: 128
-	pref2: &3Swiezak II
+	prefix2: &3Swiezak II
 
 	cobble3: 256
-	pref3: &6Swiezak III
+	prefix3: &6Swiezak III
 
 	cobble4: 512
-	pref4: &ePoczatkujacy I
+	prefix4: &ePoczatkujacy I
 
 	cobble5: 1024
-	pref5: &2Poczatkujacy II
+	prefix5: &2Poczatkujacy II
 
 	cobble6: 2048
-	pref6: &4Poczatkujacy III
+	prefix6: &4Poczatkujacy III
 
 	cobble7: 4096
-	pref7: &4Zaawansowany I
+	prefix7: &4Zaawansowany I
 
 	cobble8: 8192
-	pref8: &cZaawansowany II
+	prefix8: &cZaawansowany II
 
 	cobble9: 16384
-	pref9: &3Zaawansowany III
+	prefix9: &3Zaawansowany III
 
 	cobble10: 32768
-	pref10: &8[» &cZAAWANSOWANY &8«]
+	prefix10: &8[» &cZAAWANSOWANY &8«]
 
 on mine of stone:
 	add 1 to {mined::stone::%player%}

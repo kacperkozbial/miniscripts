@@ -1,0 +1,124 @@
+Witam poszukuję skryptu do topek 
+wykopanego stone.spedzonego czasu.wykopanego obsa.zjedzonych koxow itp pvp topka
+
+on join:
+	if {mine::obsidian::%player%} isn't set:
+		set {mine::obsidian::%player%} to 0
+	if {mine::stone::%player%} isn't set:
+		set {mine::stone::%player%} to 0
+	if {eat:egapple::%player%} isn't set:
+		set {eat::egapple::%player%} to 0
+	if {onlineTime::%player%} isn't set:
+		set {onlineTime::%player%} to 1
+	if {kills.%player%} isn't set:
+		set {kills.%player%} to 0
+	if {deaths.%player%} isn't set:
+		set {deaths.%player%} to 0
+	if {kd.%player%} isn't set:
+		set {kd.%player%} to 0
+on break of obsidian:
+	add 1 to {mine::obsidian::%player%}
+on break of stone:
+	add 1 to {mine::stone::%player%}
+on eat of enchanted golden apple:
+	add 1 to {eat::egapple::%player%}
+on death of player:
+	attacker is a player
+	add 1 to {kills.%attacker%}
+	add 1 to {deaths.%victim%}
+	set {kd.%attacker%} to {kills.%attacker%}/{deaths.%attacker%}
+	set {kd.%victim%} to {kills.%victim%}/{deaths.%attacker%}
+	stop
+every minute:
+	loop all players:
+		add 1 to {onlineTime::%loop-player%}
+		stop
+command /top [<text="gui">]:
+	trigger:
+		if argument is "gui":
+			open chest with 1 rows named "&8» &6TOP &8«" to player
+			format slot 1 of player with 1 of yellow stained glass pane named "&8» &eTOP &5OBSYDIANU &8«" to run [make player execute command "top obsidian"]
+			format slot 2 of player with 1 of green stained glass pane named "&8» &eTOP &7STONE'A &8«" to run [make player execute command "top stone"]
+			format slot 3 of player with 1 of white stained glass pane named "&8» &eTOP &3K/D" to run [make player execute command "top kd"]
+			format slot 4 of player with 1 of black stained glass pane named "&8» &eTOP &2ONLINE" to run [make player execute command "top online"]
+			format slot 5 of player with 1 of red stained glass pane named "&8« &eTOP &6&lZJEDZONYCH KOXOW" to run [make player execute command "top kox"]
+		if argument is "obsidian":
+			set {_s} to size of {mine::obsidian::*}
+			loop {_s} times:
+				loop {mine::obsidian::*}:
+					if {_v.%loop-number%} is not set:
+						set {_v.%loop-number%} to loop-value
+						set {_n.%loop-number%} to loop-index
+					if loop-value is bigger than {_v.%loop-number%}:
+						set {_v.%loop-number%} to loop-value
+						set {_n.%loop-number%} to loop-index
+				remove {_v.%loop-number%} from {mine::obsidian::*}
+			loop {_s} times:
+				if loop-number is smaller than or equal to 5:
+					send "&8» &6%loop-number% &8» &3&l%{_n.%loop-number%}% &6&l%{_v.%loop-number%}%"
+					set {mine::obsidian::%{_n.%loop-number%}%} to {_v.%loop-number%}
+					stop
+		if argument is "stone":
+			set {_s} to size of {mine::stone::*}
+			loop {_s} times:
+				loop {mine::stone::*}:
+					if {_v.%loop-number%} is not set:
+						set {_v.%loop-number%} to loop-value
+						set {_n.%loop-number%} to loop-index
+					if loop-value is bigger than {_v.%loop-number%}:
+						set {_v.%loop-number%} to loop-value
+						set {_n.%loop-number%} to loop-index
+				remove {_v.%loop-number%} from {mine::stone::*}
+			loop {_s} times:
+				if loop-number is smaller than or equal to 5:
+					send "&8» &6%loop-number% &8» &3&l%{_n.%loop-number%}% &6&l%{_v.%loop-number%}%"
+					set {mine::stone::%{_n.%loop-number%}%} to {_v.%loop-number%}
+					stop
+		if argument is "kd":
+			set {_s} to size of {kd::*}
+			loop {_s} times:
+				loop {kd::*}:
+					if {_v.%loop-number%} is not set:
+						set {_v.%loop-number%} to loop-value
+						set {_n.%loop-number%} to loop-index
+					if loop-value is bigger than {_v.%loop-number%}:
+						set {_v.%loop-number%} to loop-value
+						set {_n.%loop-number%} to loop-index
+				remove {_v.%loop-number%} from {kd::*}
+			loop {_s} times:
+				if loop-number is smaller than or equal to 5:
+					send "&8» &6%loop-number% &8» &3&l%{_n.%loop-number%}% &6&l%{_v.%loop-number%}%"
+					set {kd::%{_n.%loop-number%}%} to {_v.%loop-number%}
+					stop
+		if argument is "online":
+			set {_s} to size of {onlineTime::*}
+			loop {_s} times:
+				loop {onlineTime::*}:
+					if {_v.%loop-number%} is not set:
+						set {_v.%loop-number%} to loop-value
+						set {_n.%loop-number%} to loop-index
+					if loop-value is bigger than {_v.%loop-number%}:
+						set {_v.%loop-number%} to loop-value
+						set {_n.%loop-number%} to loop-index
+				remove {_v.%loop-number%} from {onlineTime::*}
+			loop {_s} times:
+				if loop-number is smaller than or equal to 5:
+					send "&8» &6%loop-number% &8» &3&l%{_n.%loop-number%}% &6&l%{_v.%loop-number%}%"
+					set {onlineTime::%{_n.%loop-number%}%} to {_v.%loop-number%}
+					stop
+		if argument is "kox":
+			set {_s} to size of {eat::egapple::*}
+			loop {_s} times:
+				loop {eat::egapple::*}:
+					if {_v.%loop-number%} is not set:
+						set {_v.%loop-number%} to loop-value
+						set {_n.%loop-number%} to loop-index
+					if loop-value is bigger than {_v.%loop-number%}:
+						set {_v.%loop-number%} to loop-value
+						set {_n.%loop-number%} to loop-index
+				remove {_v.%loop-number%} from {eat::egapple::*}
+			loop {_s} times:
+				if loop-number is smaller than or equal to 5:
+					send "&8» &6%loop-number% &8» &3&l%{_n.%loop-number%}% &6&l%{_v.%loop-number%}%"
+					set {eat::egapple::%{_n.%loop-number%}%} to {_v.%loop-number%}
+					stop

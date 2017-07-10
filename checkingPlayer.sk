@@ -1,0 +1,119 @@
+Mógł mi ktoś napisać skrypt na sprawdzanie chodzi mi że komendą 
+/ustasprawdzanie ustawiam sprawdzanie.
+I komendą /sprawdz nick gracza gracz londuje na sprawdzanie ustawione komendą 
+/ustawsprawdzanie.
+W czasie sprawdzania gracz nie może pisać na chacie 
+i używać komand dopiero jak napisze komende 
+/sprawdzczysty nick gracza to gracz londuje na spawnie serwera i wtedy juž może używać komend i pisać na chacie.
+
+spawn z pluginu essentials
+
+Bardzo bym prosił o skrypt.
+
+# [ // script \\ ]
+# name: checkingPlayer
+# version: 0.1
+# creator: esej
+# date: 10.07.2017 [ 11:42 ]
+# [ \\ script // ]
+
+options: # ustawienia
+
+	perm-check: esej.checkplayer.check
+
+	perm-clear: esej.checkplayer.clear
+
+	perm-set: esej.checkplayer.set
+	
+variables:
+	{checkplayer::location} = "0, 0, 0"
+	{checkplayer::sprawdzany::%player%} = ""
+	{checkplayer::bantime::%player%} = "0"
+command /esej:checkplayer [<text>] [<text>] [<text>]:
+	description: Sprawdzanie graczy.
+	executable by: player
+	aliases: /checkplayer, /sprawdz, /check,
+	trigger:
+		if argument 1 isn't "set" or "check" or "clear" or "ustawsprawdzanie" or" sprawdz" or "czysty":
+			send "&8» &cNie poprawny argument 1! &8(&6%argument 1%&8)" to the player
+			stop
+		if argument 1 is "set" or "ustawsprawdzanie":
+			if player has permission "{@perm-set}":
+				set {checkplayer::location} to location of the player
+				send "&8» &cUstawiles lokalizacje sprawdzania" to the player
+				stop
+		if argument 1 is "check" or "sprawdz":
+			if player has permission "{@perm-check}":
+				if {checkplayer::location} is set:
+					if argument 2 is a player:
+						set {checkplayer::sprawdzany::%argument 2 parsed as player%} to true
+						teleport argument 2 parsed as player to {checkplayer::location}
+						if argument 3 is "andme":
+							teleport the player to {checkplayer::location}
+							stop
+						broadcast "&8» &ccheckPlayer &8«"
+						broadcast "&8» &6Sprawdzany jest: &c%argument 2 parsed as player%"
+						broadcast "&8» &6Sprawdzajacym jest: &a%the player%"
+						broadcast "&8» &cJesli chcesz sie przyznac do cheatow wpisz &8(&6/poddajsie&8)"
+						stop
+					else:
+						send "&8» &c/checkplayer &2<sprawdz> &4<nick gracza> &6<andme>" to the player
+				else:
+					send "&8» &cNie ustawiono lokacji sprawdzania" to the player
+			else:
+				send "&8» &cYou don't have permission." to the player
+		if argument 1 is "czysty" or "clear":
+			if player has permission "{@perm-clear}":
+				if {checkplayer::sprawdzany::%argument 2 parsed as player%} is true:
+					clear {checkplayer::sprawdzany::%argument 2 parsed as player%}
+					broadcast "&8» &ccheckPlayer &8«"
+					broadcast "&8» &6%argument 2 parsed as player% &cjest &aCZYSTY"
+					broadcast "&8» &ccheckPlayer &8«"
+					make argument 2 parsed as player command "spawn" as op
+				else:
+					send "&8» &cTen gracz nie jest sprawdzany..." to the player
+			else:
+				send "&8» &cYou don't have permission. &8(&c{@perm-clear}&8)" to the player
+		if argument 1 is "autor" or "author":
+			send "&8» &8[    &a// &cscript &a\\   &8] &8«" to the player
+			send "&8» &8[ &6name&8: &ccheckPlayer &8] &8«" to the player
+			send "&8» &8[ &6version&8: &a0.1      &8] &8«" to the player
+			send "&8» &8[ &6creator&8: &cesej     &8] &8«" to the player
+			send "&8» &8[    &a\\ &cscript &a//   &8]
+			stop
+on quit:
+	if {checkplayer::sprawdzany::%player%} is true:
+		ban player due to "&8» &cLogout podczas sprawdzania &8«"
+		add {@ban-time} to {checkplayer::bantime::%player%}
+		broadcast "&8» &c%player% wylogowal sie podczas sprawdzania"
+		loop all players:
+			play raw sound "mob.wither.death" with pitch 2 volume 100 at loop-player
+		stop
+	stop
+on click:
+	if {checkplayer::sprawdzany::%player%} is true:
+		cancel event
+on connect:
+	if {checkplayer::bantime::%player%} is > 0:
+		kick player due to "&8» &cMasz bana! &8«%nl%&8» &9Czas: &6%{checkplayer::bantime::%player%}%"
+
+every day:
+	loop all players:
+		if {checkplayer::bantime::%loop-player%} is set:
+			subtract 1 from {checkplayer::bantime::%loop-player%}
+			message "&8» &cUff.. juz minal jeden dzien!" to the loop-player
+			stop
+		stop
+	stop
+on chat:
+	if {checkplayer::sprawdzany::%player%} is true:
+		cancel event
+		send "&8» &cJestes sprawdzany! Nie mozesz tymczasowo pisac na chacie" to the player
+		stop
+	stop
+on command:
+	if {checkplayer::sprawdzany::%player%} is true:
+		cancel event
+		send "&8» &cJestes sprawdzany! Nie mozesz korzystac z chatu" to the player
+		stop
+	stop

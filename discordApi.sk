@@ -1,0 +1,38 @@
+# [ // api-script \\ ]
+# [ name: discordApi ]
+# [ version: 0.1     ]
+# [ creator: esej    ]
+# [ date: 10.07.2017 ]
+# [ \\ api-script // ]
+# [    description   ]----------------------------------------------------]
+# Minecraft plugin thanks to which we can manage the Discord in the game. |
+# [ stop description ]----------------------------------------------------]
+
+# addon required: vixio(https://www.spigotmc.org/resources/skript-addon-vixio-the-best-discord-addon-on-the-market.34360/)
+# addon required: umbaska 3 (https://www.spigotmc.org/resources/addon-umbaska.7352/update?update=135333)
+
+options:
+	# link do discorda :D
+	discord_link: https://discord.gg/DUFSSg
+on discord message:
+	broadcast "&8[&6discord&cApi&8] &6» &3%discord id of event-user% &8» &c%event-message%"
+# required umbaska 3 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+command /esej:discordApi [<text>] [<text>]:
+	description: discordApi - thanks to which we can manage the Discord in the game/
+	aliases: /discordApi, /dApi
+	trigger:
+		if argument 1 is "reply" or "odp" or "odpowiedz":
+			discord reply with argument 2 # required vixio download is up
+			send "&8[&6discord&cApi&8] &6» &aPomyslnie &6odpowiedziales." to the player
+		if argument 1 is "invite":
+			if argument 2 is set:
+				send "&8» &cDolacz do &9Discorda&4!" to the argument 2 parsed as player
+				SEND "&8» &c{@discord_link}" to the argument 2 parsed as player
+				stop
+			else:
+				send "&8» &4Nie podales &cnicku gracza" to the player
+				stop
+		if argument 1 is "author" or "autor:
+			send "&8» &9Autor: &6esej" to the player
+			stop

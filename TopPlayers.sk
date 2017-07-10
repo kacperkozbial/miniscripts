@@ -1,6 +1,3 @@
-Witam poszukuję skryptu do topek 
-wykopanego stone.spedzonego czasu.wykopanego obsa.zjedzonych koxow itp pvp topka
-
 on join:
 	if {mine::obsidian::%player%} isn't set:
 		set {mine::obsidian::%player%} to 0

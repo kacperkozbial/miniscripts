@@ -1,15 +1,3 @@
-Mógł mi ktoś napisać skrypt na sprawdzanie chodzi mi że komendą 
-/ustasprawdzanie ustawiam sprawdzanie.
-I komendą /sprawdz nick gracza gracz londuje na sprawdzanie ustawione komendą 
-/ustawsprawdzanie.
-W czasie sprawdzania gracz nie może pisać na chacie 
-i używać komand dopiero jak napisze komende 
-/sprawdzczysty nick gracza to gracz londuje na spawnie serwera i wtedy juž może używać komend i pisać na chacie.
-
-spawn z pluginu essentials
-
-Bardzo bym prosił o skrypt.
-
 # [ // script \\ ]
 # name: checkingPlayer
 # version: 0.1

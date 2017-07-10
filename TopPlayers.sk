@@ -34,12 +34,12 @@ command /top [<text="gui">]:
 	trigger:
 		if argument is "gui":
 			open chest with 1 rows named "&8» &6TOP &8«" to player
-			format slot 1 of player with 1 of yellow stained glass pane named "&8» &eTOP &5OBSYDIANU &8«" to run [make player execute command "top obsidian"]
-			format slot 2 of player with 1 of green stained glass pane named "&8» &eTOP &7STONE'A &8«" to run [make player execute command "top stone"]
-			format slot 3 of player with 1 of white stained glass pane named "&8» &eTOP &3K/D" to run [make player execute command "top kd"]
-			format slot 4 of player with 1 of black stained glass pane named "&8» &eTOP &2ONLINE" to run [make player execute command "top online"]
-			format slot 5 of player with 1 of red stained glass pane named "&8« &eTOP &6&lZJEDZONYCH KOXOW" to run [make player execute command "top kox"]
-			format slot 9 of player with 1 of black stained glass pane named "&8» Informacje &8« " with lore "&8[ // script \\ ]||&8» &6name: &9topPlayers &8«||&8» &6version: &90.1 &8«||&8» &6creator: &9esej &8«||&8[ \\ script // ]" to be unstealable"
+			format slot 1 of player with 1 of yellow stained glass pane named "&8» &eTOP &5OBSYDIANU &8«" to close then run [make player execute command "top obsidian"]
+			format slot 2 of player with 1 of green stained glass pane named "&8» &eTOP &7STONE'A &8«" to close then run [make player execute command "top stone"]
+			format slot 3 of player with 1 of white stained glass pane named "&8» &eTOP &3K/D" to close then run [make player execute command "top kd"]
+			format slot 4 of player with 1 of black stained glass pane named "&8» &eTOP &2ONLINE" to close then run [make player execute command "top online"]
+			format slot 5 of player with 1 of red stained glass pane named "&8« &eTOP &6&lZJEDZONYCH KOXOW" to close then run [make player execute command "top kox"]
+			format slot 8 of player with 1 of black stained glass pane named "&8» Informacje &8« " with lore "&8[ // script \\ ]||&8» &6name: &9topPlayers &8«||&8» &6version: &90.1 &8«||&8» &6creator: &9esej &8«||&8[ \\ script // ]" to be unstealable"
 		if argument is "obsidian":
 			set {_s} to size of {mine::obsidian::*}
 			loop {_s} times:

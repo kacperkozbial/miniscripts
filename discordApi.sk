@@ -1,7 +1,8 @@
 # [ // api-script \\ ]
 # [ name: discordApi ]
-# [ version: 0.1     ]
+# [ version: 0.2     ]
 # [ creator: esej    ]
+# [ fixes: ByczekTV  ]
 # [ date: 10.07.2017 ]
 # [ \\ api-script // ]
 # [    description   ]----------------------------------------------------]
@@ -10,6 +11,7 @@
 
 # addon required: vixio(https://www.spigotmc.org/resources/skript-addon-vixio-the-best-discord-addon-on-the-market.34360/)
 # addon required: umbaska 3 (https://www.spigotmc.org/resources/addon-umbaska.7352/update?update=135333)
+# addon required: SkQuery (https://dev.bukkit.org/projects/skquery)
 
 options:
 	# link do discorda :D
@@ -23,16 +25,18 @@ command /esej:discordApi [<text>] [<text>]:
 	aliases: /discordApi, /dApi
 	trigger:
 		if argument 1 is "reply" or "odp" or "odpowiedz":
-			discord reply with argument 2 # required vixio download is up
-			send "&8[&6discord&cApi&8] &6» &aPomyslnie &6odpowiedziales." to the player
+			if argument 2 is set:
+				discord reply with argument 2 # required vixio download is up
+				send "&8[&6discord&cApi&8] &6» &aPomyslnie &6odpowiedziales." to the player
 		if argument 1 is "invite":
 			if argument 2 is set:
-				send "&8» &cDolacz do &9Discorda&4!" to the argument 2 parsed as player
-				SEND "&8» &c{@discord_link}" to the argument 2 parsed as player
+				send json "&8» &cDolacz do &9Discorda&4! &8<-- &6&lKLIKNIJ" tooltip "&cKLIKNIJ" open "{@discord_link}" to playerayer
 				stop
 			else:
 				send "&8» &4Nie podales &cnicku gracza" to the player
 				stop
 		if argument 1 is "author" or "autor:
+			send "&8» &3discordApi" to the player
 			send "&8» &9Autor: &6esej" to the player
+			send "&8» &9fixes by &6&lByczekTV" to the player
 			stop

@@ -1,0 +1,62 @@
+# [ // script \\ ]
+# name: eStone   ]
+# version: 0.1   ] 
+# creator: esej  ]
+# [ \\ script // ]
+
+options:
+
+	version: 0.1
+
+	# Przedmiot stoniarki
+	stoniarka: bedrock
+
+	# Czas regeneracji (w sekundach)
+	time-regeneration: 0.2
+
+	# Układ craftowania
+		1	2	3	4	5	6	7	8	9
+	crafting: stone, stone, stone, stone, diamond , stone, stone , stone , stone
+	# 1|2|3
+	# 4|5|6
+	# 7|8|9
+
+on load:
+	register new shaped recipe for {@stoniarka} named "&8» &e&lSTONIARKA &8«" using {@crafting}
+	register new shaped recipe for golden pickaxe named "&8» &4NISZCZYCZCIEL &cSTONIAREK &8«" using wood, wood, wood, wood, gold ingot, wood, wood, wood, wood
+	send "[eSTONE] Zaladowano w wersji {@version}" to the console
+	if "{@version}" isn't "0.1":
+		download from "https://raw.githubusercontent.com/esejj/miniscripts/master/eStone.sk" to "plugins/skript/scripts/%script's name%.sk"
+		send "[eStone] Zaladowano nowa wersje" to the console
+on place of {@stoniarka}:
+	if name of event-block is "&8» &e&lSTONIARKA &8«":
+		set event-block to stone
+		add event-location to {esej::eStone::location::*}
+		send "{@place-stoniarka}" to the player
+		stop
+	else:
+		if player doesn't have permission "place.bedrock":
+			cancel event
+			send "&8» &cNie mozesz postawic &8BEDROCKA" to the player
+			loop all players:
+				if loop-player has permission "esej.eStone.notif_read":
+					remove all bedrock from player's inventory
+					send "&8» &c%player% &6probowal postawic bedrocka" to loop-player
+					stop
+				stop
+on mine of stone:
+	{esej::eStone::location::*} contains "%event-location%":
+		if player has golden pickaxe named "&8» &4NISZCZYCIEL &cSTONIAREK &8«":
+			remove event-location from {esej::eStone::location::*}
+		else:
+			wait {@time-regeneration} seconds
+			set event-block to stone
+command /esej:eStone:
+	description: plugin na stoniarki.
+	aliases: /eStone
+	trigger:
+		send "&8» &9[&6eStone&9] &8«" to the player
+		send "&8» &eAutor: &6esej &8«" to the player
+		send "&8» &eversion: &20.1 &8«" to the player
+		send "&8» &c&lDL: &9https://raw.githubusercontent.com/esejj/miniscripts/master/eStone.sk &8«" to the player
+		stop

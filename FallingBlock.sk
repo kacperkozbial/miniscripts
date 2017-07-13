@@ -1,0 +1,31 @@
+# [ // script \\ ]
+# name: FallingBlock
+# version: 0.1
+# creator: esej
+# [ \\ script // ]
+
+function fallingBlock(p: player , s: string)::string:
+	loop all blocks:
+		if difference between loop-block and y-coord of {_p} > 30:
+			set {_loc} to y-coord of loop-block
+			set block at {_loc} to {_s}
+			set {_true} to true
+			while {_true}:
+				set block at {_loc} to air
+				subtract 1 from y-coord of {_loc}
+				set block at {_loc} to chest
+				set {_loc1} to {_loc}
+				subtract 1 from y-coord of {_loc1}
+			if block at {_loc1} is not air:
+				delete {_true}
+			create 50 of water particles at {_loc} offset by 1, 0, 1 at speed 0.5
+			loop 10 times:
+				set {_n} to random integer from 1 to 100
+	 			play sound "BLOCK_ANVIL_PLACE" to {_p} with volume {_n} and pitch 1
+command /esej:fallingBlock <string>:
+	description: spadajace bloki łiiiiiii.
+	aliases: /fallingBlock, /fallblock,
+	trigger:
+		fallingBlock(player , argument)
+		send "&8» &6Juz leci do Ciebie bloczek.." to the player
+		stop

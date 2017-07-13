@@ -1,0 +1,98 @@
+# ReportPlayer  #
+# Made by: esej #
+# Version: 0.1  #
+options:
+
+	tag: &8[&6» &c&lREP &6«&8]
+	tag2: &8[&6» &c&lHELPOP &6«&8]
+
+	# Permission for Skript 'report' and 'helpop' / Uprawnienia dla skryptu 'report' i 'helpop'
+	perm-read: esej.report.read # Uprawnienie do przeczytania wiadomosci z report
+	read-perm: esej.helpop.read # Uprawnienie do przeczytania wiadomosci z helpop
+
+	# SkRayFall required and Minecraft 1.8 / Wymagane: SkRayFall i Minecraft 1.8
+	1.8: no 
+	# if you want use this option set 'yes' / jesli chcesz skorzystac z tej opcji ustaw ją na 'tak'
+	# option add send title // opcja dodaje wyslanie powiadomienia w wersji 1.8
+
+	# version of skript / wersja skryptu
+	ver: 0.1
+	# do not change / nie zmieniac
+command /esej:reportplayer [<player>]:
+	aliases: /reportplayer, /report, /rp
+	trigger:
+		if player-argument is set:
+			open chest with 3 rows named "&8» &6{@tag} &8(&c%player-arg%&8) &8«" to player
+			loop 12 times:
+				add 1 to {_x}
+				format slot {_x}-1 of player with black stained glass pane named " " to be unstealable
+			format slot 12 of player with 1 of red stained glass pane named "&8» &cBluzgi na chacie" with lore "&8• &3np. &cprzeklenstwa, &4wyzwiska &3etc. &8•" to run [set {rep::status::%player%} to true]->[make player execute command "rep 1 %player-arg%"]
+			format slot 13 of player with 1 of red stained glass pane named "&8» &cCheaty" with lore "&8• &3np. KillAura, Makro, AntyKnock etc." to run [set {rep::status::%player%} to true]->[make player execute command "rep 2 %player-arg%"]
+			format slot 14 of player with 1 of red stained glass pane named "&8» &cGrieffing" with lore "&8• &3Stawianie klocków 1-5 kratek przed wroga gildia" to run [set {rep::status::%player%} to true]->[make player execute command "rep 3 %player-arg%"]
+			format slot 15 of player with 1 of red stained glass pane named "&8» &cOszustwa" with lore "&8• &3np. podczas wymiany etc." to run [set {rep::status::%player%} to true]->[make player execute command "rep 4 %player-arg%"]
+			loop 12 times:
+				set {_x} to 16
+				add 1 to {_x}
+				format slot {_x}-1 of player with 1 of black stained glass pane named " " to be unstealable
+		else:
+			open chest with 1 rows named "&cERROR" to player
+			format slot 4 of player with red stained glass named "&8» &4Blad: &cNie podales nicku gracza &8«" to close then run [kick player due to "&8» &4Nastepnym razem uzyj: &c/report &4<nick gracza>"]
+			stop
+command /esej:rep [<text>] [<player>]:
+	aliases: /rep
+	trigger:
+		if {rep::status::%player%} is true:
+			if argument 1 is set:
+				if argument 2 is set:
+					set {_argument} to argument 1
+					replace all "1" with "bluzgi" in {_argument}
+					replace all "2" with "cheaty" in {_argument}
+					replace all "3" with "greffing" in {_argument}
+					replace all "4" with "oszustwa" in {_argument}
+					set {rep::status::%player%} to false
+					if {_argument} is "bluzgi":
+						set {_argument} to "bluzgi na chacie"
+					loop all players:
+						if loop-player has permission "{@perm-read}":
+							send "&8• {@tag} &8(&6%player% zglasza &8)&6: &c%{_argument}% &3» &e%player-arg%" to loop-player
+							if "{@1.8}" is "yes" or "tak":
+								send loop-player title "&8• &cOtrzymales zgloszenie" with subtitle "&8• &6Od: &9%player%" for 5 seconds # Version beta / wersja beta
+							else:
+								display board named "&8» &c&lREPORT &8«" to loop-player
+								make score "&8• &cOtrzymales zgloszenie" in board of loop-player to 4
+								make score "&8• &6Od: &9%player%" in board of loop-player to 3
+								make score "&8• &6Na: &c%player-arg%" in board of loop-player to 2
+								make score "&8• &6Powod: &c%argument 1%" in board of loop-player to 1
+								move display of loop-player to sidebar
+								stop
+				else:
+					send "&8» &cNie podales nicku gracza!" to the player
+					stop
+			else:
+				send "... error"
+				stop
+
+command /esej:helpop:
+	aliases: /helpop, /hlop
+	trigger:
+		open chest with 1 rows named "&8» {@tag2} &8«" to the player
+		format slot 4 of player with 1 of black stained glass pane named "&8» &cJesli potrzebujesz pomocy: &8«" with lore "&8• &3Kliknij!||&8• &6Aby napisac na chacie do administracji" to close then run [set {helpop::chat::%player%} to true]->[set {helpop::timer::%player%} to 30]
+on chat:
+	if {helpop::chat::%player%} is true:
+		loop all players:
+			if loop-player has permission {@read-perm}:
+				send "{@tag2} &8(&c%player%&8) &3» &6%message%" to loop-player
+				set {helpop::chat::%player%} to false
+				stop
+			else:
+				send "&8» &cChwilowo nie ma zadnego administratora na serwerze" to player
+				set {helpop::chat::%player%} to false
+				stop
+every second:
+	loop all players:
+		if {helpop::timer::%loop-player%} > 0:
+			subtract 1 from {helpop::timer::%Loop-player%}
+			if {helpop::timer::%loop-player%} = 0:
+				set {helpop::chat::%loop-player%} to false
+				send "&8» &cNic nie napisales na helpopie w ciagu &730 sekund&c." to loop-player
+				stop

@@ -4,7 +4,7 @@
 # creator: esej   ]
 # [ \\ script //  ]
 # Author page: Michma1707
-# Link to the page: https://moddersmine.com/api/twitchapi.php
+# Link to the page: https://moddersmine.com/api/twitch.php
 command /esej:twitchapi <text>:
 	description: Sprawdz informacje o swoim ulubionym streamerze.
 	aliases: /twitchapi

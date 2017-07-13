@@ -1,0 +1,26 @@
+# [ // script \\  ]
+# name: twitchApi ]
+# version: 0.1    ]
+# creator: esej   ]
+# [ \\ script //  ]
+
+command /esej:twitchapi <text>:
+	description: Sprawdz informacje o swoim ulubionym streamerze.
+	aliases: /twitchapi
+	trigger:
+		argument is set:
+			twitchFunction(argument)
+			open chest with 1 rows named "&8» &5Twitch&6&lAPI &8«" to the player
+			format slot 4 of player with 1 of cyan stained glass pane named "&8» &3%argument% &8«" with lore "%{lore}%" to be unstealable
+		else:
+			open chest with 1 rows named "java.lang.nullpointerexception" to the player
+			format slot 4 of player with 1 of cyan stained glass pane named "java.lang.nullpointerexception" with lore "bad name of the streamer" to close then run [send "java.lang.nullpointerexception" to the player]
+
+function twitchFunction(t: text):
+	set {_result} to result of connect to "http://moddersmine.com/api/twitchSelect.php?stream=%{_t}%&string=game"
+	set {_result2} to result of connect to "http://moddersmine.com/api/twitchSelect.php?stream=%{_t}%&string=viewers"
+	set {_result3} to result of connect to "http://moddersmine.com/api/twitchSelect.php?stream=%{_t}%&string=language&tree=channel"
+	replace all "pl" with "Polski" in {_result3}
+	replace all "en" with "Angielski" in {_result3}
+	set {_result4} to result of connect to "http://moddersmine.com/api/twitchSelect.php?stream=%{_t}%&string=status&tree=channel"
+	set {lore} to "&8» &6Gra: &e%{_result}% &8«||&8»&6Widzowie: &e%{_result2}% &8«||&8» &6Jezyk transmisji: &e%{_result3}% &8«||&8» &6Nazwa transmisji: &e%{_result4}% &8«||&8» &c&lLINK DO KANALU: &6https://twitch.tv/%{_t}% &8«"

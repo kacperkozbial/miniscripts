@@ -1,0 +1,32 @@
+options:
+
+	world: sky
+
+
+command /tworzwyspe:
+	trigger:
+		if {wyspa::%player%} > 1:
+			send "&8» &cNie mozesz miec wiecej wysp!" to the player
+		if size of {wyspa::location::*} > 0:
+			add 500 to {_x}
+			add 500 to {_z}
+		else:
+			set {_x} to 500
+			set {_z} to 500
+		set {wyspa::location::%player%} to "%{_x}% 60 %{_z}%"
+		execute command "mvtp {@world}"
+		teleport player to {wyspa::location::%player%}
+        	paste schematic "House" at {wyspa::location::%player%}
+on place:
+	if world of player is "{@world}":
+		add event-location to {island::placed_blocks::%player%}
+		stop
+	stop
+command /usunwyspe:
+	trigger:
+		if {wyspa::%player%} > 1:
+			send "&8» &cUsuwanie wyspy w trakcie..." to the player
+			execute command "mvtp {@world}"
+			teleport player to {wyspa::location::%player%}
+			loop all blocks around player in radius 300:
+				

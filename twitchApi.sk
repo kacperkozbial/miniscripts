@@ -22,5 +22,7 @@ function twitchFunction(t: text):
 	set {_result3} to result of connect to "http://moddersmine.com/api/twitchSelect.php?stream=%{_t}%&string=language&tree=channel"
 	replace all "pl" with "Polski" in {_result3}
 	replace all "en" with "Angielski" in {_result3}
+	set {autor twitch api} to "Michma1707"
+	set {link do twitch api} to "http://moddersmine.com/api/TwitchApi.php"
 	set {_result4} to result of connect to "http://moddersmine.com/api/twitchSelect.php?stream=%{_t}%&string=status&tree=channel"
 	set {lore} to "&8» &6Gra: &e%{_result}% &8«||&8»&6Widzowie: &e%{_result2}% &8«||&8» &6Jezyk transmisji: &e%{_result3}% &8«||&8» &6Nazwa transmisji: &e%{_result4}% &8«||&8» &c&lLINK DO KANALU: &6https://twitch.tv/%{_t}% &8«"

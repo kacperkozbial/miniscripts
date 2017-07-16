@@ -1,0 +1,44 @@
+options:
+
+	# czy wybuchanie tnt gdy jest postawione podczas gdy tnt jest wylaczone ma dzialac? (true - tak | false - nie)
+	explode-tnt: false
+
+	# kladzenie tnt gdy tnt jest wylaczone ma dzialac? (true - tak | false - nie)
+	place-tnt: false
+
+	not-perm: &8» &cYou don't have permission.
+on explode:
+	if "{@explode-tnt}" is "false":
+		if {esej::tnt::status} is false:
+			cancel event
+on place of tnt:
+	if "{@place-tnt}" is "false":
+		if {esej::tnt::status} is false:
+			wait 0.1 ticks
+			cancel event
+			send "&8» &c&lTNT &6&lJEST &4&lWYLACZONE" to the player
+			stop
+command /esej:tnt [<text>]:
+	description: Wylaczanie i wlaczanie TNT.
+	aliases: /tnt
+	trigger:
+		if argument is "on":
+			if player has permission "esej.tnt.switch":
+				set {esej::tnt::status} to true
+				send "&8[&6» &4TNT&7-&6SWITCHER &6«&8] &cTNT &6zostalo &awlaczone" to the player
+				broadcast "&8» &cTNT &6zostalo &awlaczone" to the player
+				stop
+			else:
+				send "{@not-perm}" to the player
+		if argument is "off":
+			if player has permission "esej.tnt.switch":
+				set {esej::tnt::status} to false
+				send "&8[&6» &4TNT&7-&6SWITCHER &6«&8] &cTNT &6zostalo &cwylaczone" to the player
+				broadcast "&8» &cTNT &6zostalo &cwylaczone"
+				stop
+			else:
+				send "{@not-perm}" to the player
+		if argument is "author" or "autor":
+			send "&6Autor skryptu: &3esej" to the player
+			stop
+	

@@ -39,6 +39,9 @@ first connect:
 				message "&6wpisz &a/intercom <nick> tak" to loop-player
 				message "&7Aby ustawic powod braku pozwolenia:" to loop-player
 				message "&6wpisz &c/intercom <nick> <powod>" to loop-player
+on connect:
+	{status::gracz::%player%} isn't "zweryfikowany":
+		kick player due to "&cMusisz chwile zaczekac... administracja rozpatrywuje twoje zgloszenie"
 command /intercom [<text>] [<text>]:
 	aliases: {@alias}
 	trigger:
@@ -60,6 +63,8 @@ command /intercom [<text>] [<text>]:
 					set {domofon::ban::%arg 1 parsed as player%} to "brak"
 			else:
 				message "&cW tym miejscu wpisujesz nick: &7/intercom &c<nick> &6<powod>"
+		else:
+			send "&cNie posiadasz uprawnien."
 connect:
 	{status::gracz::%player%} = "blokada":
 		kick player due to "&cMasz blokade na dolaczanie na serwer!%nl%&7Powod: &6%{domofon::ban::%player%}%"

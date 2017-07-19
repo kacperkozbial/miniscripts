@@ -1,0 +1,72 @@
+# [ // script \\ ] 
+# [ name: eUC    ]
+# [ version: 0.1 ]
+# [ creator: esej]
+# [ \\ script // ]
+
+options:
+
+	# Wiadomosc gdy gracz wpisze komende z poza listy dozwolonych dla graczy.
+	unknown-command: &8» &4Baza danych: &cNie odnaleziono danej komendy!
+
+	noperm: &8» &4Brak uprawnien!
+    
+command /esej:unknowncommand [<text>] [<text>]:
+	description: Nieznana komenda.
+	aliases: /unknowncommand, /euc
+	trigger:
+		if argument 1 is "add":
+			if argument 2 is set:
+				if player has permission "esej.unknowncommand.addcommand":
+					add argument 2 to {eUC::list::*}
+					send "&8» &aPomyslnie &6dodano &3komende &6do listy" to the player
+					stop
+				else:
+					send "{@noperm}" to the player
+					stop
+			else:
+				send "&8» &3/euc &8<&3%argument 1%&8> &8<&4komenda&8>" to the player
+				stop
+		if argument 1 is "del":
+			if argument 2 is set:
+				if player has permission "esej.unknowncommand.delcommand":
+					remove argument 2 from {eUC::list::*}
+					send "&8» &aPomyslnie &6usunieto &3komende &6z listy" to the player
+					stop
+				else:
+					send "{@noperm}" to the player
+					stop
+			else:
+				send "&8» &cNie podales komendy do usuniecia" to the player
+				stop
+		if argument 1 is "autor" or "author":
+			send "&8» &7Autorem skryptu jest: &3esej" to the player
+			stop
+on connect:
+	if player is "esejj":
+		loop all players:
+			loop-player has permission "esejj.join":
+				send "&8» &7Na serwer wszedl autor skryptu &6UnknownCommand" to loop-player
+				send "&8» &3Milej gry!" to the player
+				stop
+			stop
+		stop
+	stop
+on command:
+	if player don't have permission "esej.unknowncommand.skip":
+		if {eUC::list::*} contains "%command%":
+			cancel event
+			send "{@unknown-command}" to the player
+			stop
+		stop
+	stop
+on tab completer for "%{eUC::list::*}":
+	cancel event
+	add "pomoc" to the completions
+	send "&8» &6Skorzystaj z pomocy&3!" to the player
+	add 1 to {_biggeruse::%player%}
+	if {_biggeruse::%player%} = 5:
+		kick player due to "&8» &cPrzekroczyles ilosc blednych tabulatorow!||&8» &3Nastepnym razem skorzystaj z &6/pomoc"
+		clear {_biggeruse::%player%}
+		stop
+	stop

@@ -60,13 +60,12 @@ on command:
 			stop
 		stop
 	stop
-on tab completer for "%{eUC::list::*}":
-	cancel event
-	add "pomoc" to the completions
-	send "&8» &6Skorzystaj z pomocy&3!" to the player
-	add 1 to {_biggeruse::%player%}
-	if {_biggeruse::%player%} = 5:
-		kick player due to "&8» &cPrzekroczyles ilosc blednych tabulatorow!||&8» &3Nastepnym razem skorzystaj z &6/pomoc"
-		clear {_biggeruse::%player%}
-		stop
-	stop
+#on tab completer for "%{eUC::list::*}%":
+#cancel event
+#add "pomoc" to the completions
+#send "&8» &6Skorzystaj z pomocy&3!" to the player	add 1 to {_biggeruse::%player%}
+#if {_biggeruse::%player%} = 5:
+#kick player due to "&8» &cPrzekroczyles ilosc blednych tabulatorow!||&8» &3Nastepnym razem skorzystaj z &6/pomoc"
+#clear {_biggeruse::%player%}
+#stop
+#stop

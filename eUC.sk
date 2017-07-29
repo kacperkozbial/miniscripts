@@ -15,6 +15,9 @@ command /esej:unknowncommand [<text>] [<text>]:
 	description: Nieznana komenda.
 	aliases: /unknowncommand, /euc
 	trigger:
+		if argument 1 isn't "add" or "del" or "autor" or "author":
+			if argument 2 isn't set:
+				send "&8» &6Argumenty do wykorzystania&8: &7add, del, author"
 		if argument 1 is "add":
 			if argument 2 is set:
 				if player has permission "esej.unknowncommand.addcommand":
@@ -30,9 +33,12 @@ command /esej:unknowncommand [<text>] [<text>]:
 		if argument 1 is "del":
 			if argument 2 is set:
 				if player has permission "esej.unknowncommand.delcommand":
-					remove argument 2 from {eUC::list::*}
-					send "&8» &aPomyslnie &6usunieto &3komende &6z listy" to the player
-					stop
+					if {eUC::list::*} contains "%argument 2%":
+						remove argument 2 from {eUC::list::*}
+						send "&8» &aPomyslnie &6usunieto &3komende &6z listy" to the player
+						stop
+					else:
+						send "&8» &cNie odnaleziono takiej komendy &7na liscie&8."
 				else:
 					send "{@noperm}" to the player
 					stop

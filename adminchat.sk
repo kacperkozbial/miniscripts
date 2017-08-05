@@ -6,7 +6,7 @@
 options:
 
 	tag-mod: &8[&9&l»&8]&r
-	tag-perm: esej.adminchat.switch.mod
+	perm-mod: esej.adminchat.switch.mod
 
 	tag-admin: &8[&4&lAC&8]&r
 	perm-admin: esej.adminchat.switch.admin

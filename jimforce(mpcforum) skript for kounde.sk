@@ -1,0 +1,205 @@
+# Tworca skryptu: GamePL7
+# Edytowany przez: esej/jimforce
+# Edytowany dla: kounde (mpcforum.pl)
+variables:
+	{stan::%player%} = 0
+options:
+	l: &7&l[&6&lF&e&lC&7&l]&a
+	p: fastcore.stan.admin
+	b: &C&lBLAD:&a
+
+	# zmutowane jablka
+	mapple-1-price: 1000 # CENA
+	mapple-1-amount: 1 # ILOSC
+
+	mapple-2-price: 1900
+	mapple-2-amount: 2
+
+	mapple-3-price: 2800
+	mapple-3-amount: 3
+
+	mapple-4-price: 3700
+	mapple-4-amount: 4
+
+	# DataTag (MutantedApple)
+	mapple-item: golden apple item
+	mapple-name: &3&lMUTANTED APPLE
+command /przelew [<player>] [<text>]:
+	trigger:
+		if arg 1 is offline player:
+			set {_arg1} to "%arg 2%" parsed as integer
+			if {_arg1} is number:
+				if {stan::%player%} is bigger than {_arg1}-1:
+					set {stan::%player%} to {stan::%player%}-{_arg1}
+					send "{@l} Pieniadze przelane! &7(&6%{_arg1}% COINS &7dla &e%arg-1%&7!)"
+					set {stan::%arg-1%} to {stan::%arg-1%}+{_arg1}
+					send "{@l} Dostales &6%{_arg1}% COINS &aod &e%player%&a!" to arg-1
+				else:
+					send "{@l} {@b} Nie masz tyle kasy!"
+			else:
+				send "{@l} {@b} Wpisz liczbe!"
+		else:
+			send "{@l} {@b} Wpisz gracza!"
+command /stan [<text>] [<player>] [<text>]:
+	aliases: /konto, /kasa
+	trigger:
+		if arg 1 is not set:
+			send "{@l} Stan konta:&6 %{stan::%player%}% COINS"
+			send "{@l} Przelej: &c/przelew NICK ILOSC"
+		if player have permission "{@p}":
+			if arg 1 is "help":
+				send "&8&l=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+				send "&a/stan add &eNICK ILOSC &7- dodaj pieniadze dla gracza"
+				send "&a/stan remove &eNICK ILOSC &7- usun pieniadze od gracza"
+				send "&a/stan clear &eNICK &7- wyczysc konto gracza"
+				send "&a/stan spr &eNICK &7- strawdz stan konta gracza"
+				send "&8&l=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+			if arg 1 is "add":
+				if arg 2 is offline player:
+					if arg 3 is set:
+						set {_arg} to "%arg 3%" parsed as integer
+						if {_arg} is number:
+							send "{@l} Dodano &6%arg-3% COINS &adla &e%arg-2%"
+							set {stan::%player%} to {stan::%player%}+{_arg}
+						else:
+							send "{@l} {@b} Wpisz liczbe!"
+					else:
+						send "{@l} {@b} Wpisz liczbe!"
+				else:
+					send "{@l} {@b} Wpisz gracza!"
+			if arg 1 is "remove":
+				if arg 2 is offline player:
+					if arg 3 is set:
+						set {_arg} to "%arg 3%" parsed as integer
+						if {_arg} is number:
+							send "{@l} Zabrano &6%arg-3% COINS &aod &e%arg-2%"
+							send "{@l} &e%player% &azabrał Ci %arg-3%" to arg-2
+							set {stan::%player%} to {stan::%player%}-{_arg}
+						else:
+							send "{@l} {@b} Wpisz liczbe!"
+					else:
+						send "{@l} {@b} Wpisz liczbe!"
+				else:
+					send "{@l} {@b} Wpisz gracza!"
+			if arg 1 is "clear":
+				if arg 2 is offline player:
+					set {stan::%player%} to "0"
+					send "{@l} Wyczyszczono &6wszystkie COINSy &aod &e%arg-2%"
+					send "{@l} &e%player% &awyczyscil Ci portfel" to arg-2
+				else:
+					send "{@l} {@b} Wpisz gracza!"
+			if arg 1 is "spr":
+				if arg 2 is offline player:
+					send "{@l} Stan konta gracza &e%arg-2%: &6%{stan::%arg-2%}% COINS"
+				else:
+					send "{@l} {@b} Wpisz gracza!"
+command /fcsklep [<text>] [<player>] [<text>]:
+	trigger:
+		if arg 1 is "set1":
+			if arg 2 is offline player:
+				if arg 3 is not set:
+					if {stan::%arg-2%} is bigger than 2999:
+						set {stan::%arg-2%} to {stan::%arg-2%}-3000
+						give diamond helmet of protection 6 and unbreaking 3 to the arg-2
+					else:
+						send "{@l} {@b} Nie masz kasy"
+		if arg 1 is "set2":
+			if arg 2 is offline player:
+				if arg 3 is not set:
+					if {stan::%arg-2%} is bigger than 2999:
+						set {stan::%arg-2%} to {stan::%arg-2%}-3000
+						give diamond chestplate of protection 6 and unbreaking 3 to the arg-2
+					else:
+						send "{@l} {@b} Nie masz kasy"
+		if arg 1 is "set3":
+			if arg 2 is offline player:
+				if arg 3 is not set:
+					if {stan::%arg-2%} is bigger than 2999:
+						set {stan::%arg-2%} to {stan::%arg-2%}-3000
+						give diamond leggings of protection 6 and unbreaking 3 to the arg-2
+					else:
+						send "{@l} {@b} Nie masz kasy"
+		if arg 1 is "set4":
+			if arg 2 is offline player:
+				if arg 3 is not set:
+					if {stan::%arg-2%} is bigger than 2999:
+						set {stan::%arg-2%} to {stan::%arg-2%}-3000
+						give diamond boots of protection 6 and unbreaking 3 to the arg-2
+					else:
+						send "{@l} {@b} Nie masz kasy"
+command /sklep:
+	trigger:
+		open chest with 6 rows named "{@l} &c&lSKLEP" to the player
+		format slot 10 of player with diamond helmet with lore "&cPROT: &66||&cNIEZNISZCZALNOSC: &63||&eCENA: &63000 COINS" named "&b&lHELM 6/3" to run [make player execute "fcsklep set1 %player%"]
+		format slot 19 of player with diamond chestplate with lore "&cPROT: &66||&cNIEZNISZCZALNOSC: &63||&eCENA: &63000 COINS" named "&b&lKLATA 6/3" to run [make player execute "fcsklep set2 %player%"]
+		format slot 28 of player with diamond leggings with lore "&cPROT: &66||&cNIEZNISZCZALNOSC: &63||&eCENA: &63000 COINS" named "&b&lSPODNIE 6/3" to run [make player execute "fcsklep set3 %player%"]
+		format slot 37 of player with diamond boots with lore "&cPROT: &66||&cNIEZNISZCZALNOSC: &63||&eCENA: &63000 COINS" named "&b&lBUTY 6/3" to run [make player execute "fcsklep set4 %player%"]
+		format slot 16 of player with {@mapple-item} with lore "&cSZTUK: &6{@mapple-1-amount}||&eCENA: &6{@mapple-1-price} COINS" named "{@mapple-name}" to run [player command "fcsklep1 mutantedapple %player% {@mapple-1-amount}"]
+		format slot 25 of player with {@mapple-item} with lore "&cSZTUK: &6{@mapple-2-amount}||&eCENA: &6{@mapple-2-price} COINS" named "{@mapple-name}" to run [player command "fcsklep1 mutantedapple %player% {@mapple-2-amount}"]
+		format slot 34 of player with {@mapple-item} with lore "&cSZTUK: &6{@mapple-3-amount}||&eCENA: &6{@mapple-3-price} COINS" named "{@mapple-name}" to run [player command "fcsklep1 mutantedapple %player% {@mapple-3-amount}"]
+		format slot 43 of player with {@mapple-item} with lore "&cSZTUK: &6{@mapple-4-amount}||&eCENA: &6{@mapple-4-price} COINS" named "{@mapple-name}" to run [player command "fcsklep1 mutantedapple %player% {@mapple-4-amount}"]
+command /fcsklep1 [<text>] [<player>] [<text>]:
+	trigger:
+		if arg 1 is "mutantedapple":
+			if arg 2 is offline player:
+				if arg 3 is "{@mapple-1-amount}":
+					{stan::%arg-2%} >= {@mapple-1-price}:
+						remove {@mapple-1-price} from {stan::%argument 2%}
+						add {@mapple-1-amount} {@mapple-item} to the argument 2
+					else:
+						send "{@l} {@b} Nie masz kasy"
+				if arg 3 is "{@mapple-2-amount}":
+					{stan::%arg-2%} >= {@mapple-2-price}:
+						remove {@mapple-2-price} from {stan::%argument 2%}
+						add {@mapple-2-amount} {@mapple-item} to the argument 2
+					else:
+						send "{@l} {@b} Nie masz kasy"
+				if arg 3 is "{@mapple-3-amount}":
+					{stan::%arg-2%} >= {@mapple-3-price}:
+						remove {@mapple-3-price} from {stan::%argument 2%}
+						add {@mapple-3-amount} {@mapple-item} to the argument 2
+					else:
+						send "{@l} {@b} Nie masz kasy"
+				if arg 3 is "{@mapple-4-amount}":
+					{stan::%arg-2%} >= {@mapple-4-price}:
+						remove {@mapple-4-price} from {stan::%argument 2%}
+						add {@mapple-4-amount} {@mapple-item} to the argument 2
+					else:
+						send "{@l} {@b} Nie masz kasy"
+command /fcsklepskup [<text>] [<player>] [<text>]:
+	trigger:
+		if arg 1 is "emerald":
+			if arg 2 is offline player:
+				if arg 3 is "16":
+					if arg-2 have 16 emerald blocks:
+						remove 16 emerald blocks from arg-2
+						set {stan::%arg-2%} to {stan::%arg-2%}+250
+						send "{@l} Dostales &6250 COINS &aza &e16 blokow emeraldow!"
+					else:
+						send "{@l} {@b} Nie masz na tyle emeraldow"
+				if arg 3 is "32":
+					if arg-2 have 32 emerald blocks:
+						remove 32 emerald blocks from arg-2
+						set {stan::%arg-2%} to {stan::%arg-2%}+500
+						send "{@l} Dostales &6500 COINS &aza &e32 bloki emeraldow!"
+					else:
+						send "{@l} {@b} Nie masz na tyle emeraldow"
+				if arg 3 is "64":
+					if arg-2 have 64 emerald blocks:
+						remove 64 emerald blocks from arg-2
+						set {stan::%arg-2%} to {stan::%arg-2%}+1000
+						send "{@l} Dostales &61000 COINS &aza &e64 bloki emeraldow!"
+					else:
+						send "{@l} {@b} Nie masz na tyle emeraldow"
+command /skup:
+	trigger:
+		open chest with 1 rows named "{@l} &c&lSKUP" to the player
+		format slot 3 of player with 0 of emerald block with lore "&eCENA: &e16 BLOKI EMERALDOW" named "&6&l250 MONET" to run [make player execute "fcsklepskup emerald %player% 16"]
+		format slot 4 of player with 0 of emerald block with lore "&eCENA: &e32 BLOKI EMERALDOW" named "&6&l500 MONET" to run [make player execute "fcsklepskup emerald %player% 32"]
+		format slot 5 of player with 0 of emerald block with lore "&eCENA: &e64 BLOKI EMERALDOW" named "&6&l1000 MONET" to run [make player execute "fcsklepskup emerald %player% 64"]
+command /sklepautor:
+	aliases: /skupautor
+	trigger:
+		send "{@l} Dodatek napisany dla serwera &eFastCore.pl &7##Pikuuuu mnie wywalil - daje skrypt wam :)"
+		send "{@l} Autorem komend &e/sklep &ai &e/skup&a jest &6&lGamePL7&a!"
+		send "{@l} &6YouTube.com/GamePL7"

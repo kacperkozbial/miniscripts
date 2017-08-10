@@ -1,5 +1,5 @@
 # Tworca skryptu: GamePL7
-# Edytowany przez: esej/jimforce
+# Edytowany przez: esej
 # Edytowany dla: kounde (mpcforum.pl)
 variables:
 	{stan::%player%} = 0

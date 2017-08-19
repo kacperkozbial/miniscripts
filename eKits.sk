@@ -1,6 +1,6 @@
 variables:
 
-	ilosc_kitow = "1" # Ustaw sobie na 6 (poniewaz kit admin bedzie osobno) i dopisujesz wg. wzoru ponizej liste przedmiotow itd...
+	ilosc_zestawow = "1" # Ustaw sobie na 7 i dopisujesz wg. wzoru ponizej liste przedmiotow itd...
 
 	ilosc_przedmiotow_w_kit_1 = "3"
 	kit1.przedmiot.1 = "diamond sword"
@@ -8,23 +8,45 @@ variables:
 	kit1.przedmiot.3 = "diamond boots"
 	kit1.czas = "6" # oczywiscie w godzinach.
 	kit1.itemInGui = "diamond sword" # Przedmiot w GUI
-	kit1.nameItemInGui = "&8» &6Zestaw np. VIP" 
+	kit1.nameItemInGui = "&6Zestaw np. VIP" 
+	kit1.loreItemInGui = "&8» &6Zestaw VIP||&8» &3Dla rang &7VIP"
 
-	ilosc_przedmiotow_w_kit_admin = "1"
-	kitAdmin.przedmiot.1 = "wooden axe"
-	# TU NIE USTAWIAJ CZASU!!
 
-command /eKits [<text>]:
+command /eKits [<text>] [<number>]:
 	aliases: /kits, /kit, /zestaw
 	description: Zestawy.
 	trigger:
-		if argument is "autor" or "author":
+		if argument 1 is "autor" or "author":
 			send "Autorem skryptu jest: esejj" # Nie zezwalam na usuniecie tej informacji :D
-		if argument isn't set:
+		if argument 1 isn't set:
 			set {_rows} to ({ilosc_zestawow} / 9)
-			if {_rows} < 0:
+			if {_rows} <= 0:
 				set {_rows} to (1)
 			if {_rows} <= 6:
 				open chest with {_rows} rows named "&8» &6&lZestawy &8«" to the player
 				loop {ilosc_zestawow} times:
-					format slot (loop-number - 1) of player with 1 of {kit%loop-number%.itemInGui} named "%coloured {kit%loop-number%.nameItemInGui}%" with lore "%coloured {kit%loop-number%.loreItemInGui}%" to close then run [player command "eKits kit%loop-number%"]
+					format slot (loop-number - 1) of player with 1 of {kit%loop-number%.itemInGui} named "&8» %coloured {kit%loop-number%.nameItemInGui}%" with lore "%coloured {kit%loop-number%.loreItemInGui}%" to close then run [player command "eKits kit %loop-number%"]
+			else:
+				send "&8» &cNa serwerze jest za duzo zestawow!" to all ops
+				send "&8(&4$ERROR_1&8)" to the player
+		if argument 1 is "kit":
+			if number-argument is set:
+				if number-argument <= {ilosc_zestawow}:
+					if {eKits::delay::kit%number-argument%::%player%} <= 0:
+						loop {ilosc_przedmiotow_w_kit_%number-argument%}:
+							add "%{kit%number-argument%.przedmiot.%loop-number%}%" to the player
+						set {eKits::delay::kit%number-argument%::%player%} to {kit%number-argument%.czas}
+						send "&8[&7ZESTAWY&8] &6Otrzymales %{kit%number-argument%.nameItemInGui}%" to the player
+					else:
+						send "&8» &4$ERROR_2&7; &cMusisz odczekac jeszcze &6%{eKits::delay::kit%number-argument%}%" to the player
+				else:
+					send "&8(&4$ERROR_3&8)" to the player
+			else:
+				send "&8» &4$ERROR_4&7; &cBrak ID kitu." to the player
+every hour:
+	loop all players:
+		loop {ilosc_zestawow} times:
+			if {eKits::delay::kit%loop-number%::%player%} > 0:
+				subtract 1 from {eKits::delay::kit%loop-number%::%player%}
+				if {eKits::delay::kit%loop-number%::%player%} = 0:
+					send "&8[&7ZESTAWY&8] &6Znow mozesz odebrac %{kit%loop-number%.itemInGui}%"

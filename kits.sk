@@ -1,0 +1,30 @@
+variables:
+
+	ilosc_kitow = "1" # Ustaw sobie na 6 (poniewaz kit admin bedzie osobno) i dopisujesz wg. wzoru ponizej liste przedmiotow itd...
+
+	ilosc_przedmiotow_w_kit_1 = "3"
+	kit1.przedmiot.1 = "diamond sword"
+	kit1.przedmiot.2 = "diamond chestplate"
+	kit1.przedmiot.3 = "diamond boots"
+	kit1.czas = "6" # oczywiscie w godzinach.
+	kit1.itemInGui = "diamond sword" # Przedmiot w GUI
+	kit1.nameItemInGui = "&8» &6Zestaw np. VIP" 
+
+	ilosc_przedmiotow_w_kit_admin = "1"
+	kitAdmin.przedmiot.1 = "wooden axe"
+	# TU NIE USTAWIAJ CZASU!!
+
+command /eKits [<text>]:
+	aliases: /kits, /kit, /zestaw
+	description: Zestawy.
+	trigger:
+		if argument is "autor" or "author":
+			send "Autorem skryptu jest: esejj" # Nie zezwalam na usuniecie tej informacji :D
+		if argument isn't set:
+			set {_rows} to ({ilosc_zestawow} / 9)
+			if {_rows} < 0:
+				set {_rows} to (1)
+			if {_rows} <= 6:
+				open chest with {_rows} rows named "&8» &6&lZestawy &8«" to the player
+				loop {ilosc_zestawow} times:
+					format slot (loop-number - 1) of player with 1 of {kit%loop-number%.itemInGui} named "%coloured {kit%loop-number%.nameItemInGui}%" with lore "%coloured {kit%loop-number%.loreItemInGui}%" to close then run [player command "eKits kit%loop-number%"]

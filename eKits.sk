@@ -10,6 +10,7 @@ variables:
 	kit1.itemInGui = "diamond sword" # Przedmiot w GUI
 	kit1.nameItemInGui = "&6Zestaw np. VIP" 
 	kit1.loreItemInGui = "&8» &6Zestaw VIP||&8» &3Dla rang &7VIP"
+	eKits::delay::kit1::%player% = 0 # przy kazdym zestawie musisz dodac ta zmienna, aby nie bylo nieporozumien.
 
 
 command /eKits [<text>] [<number>]:

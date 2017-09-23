@@ -47,4 +47,17 @@ command /hologram [<text>] [<text>] [<text>]:
 				else:
 					send "&cNie ma nazw. Sa wylacznie ID." to the player
 			else:
-				send "&cPODAJ ID" to the player 
+				send "&cPODAJ ID" to the player
+on script load:
+	loop (size of {id::hologramy}) times:
+		if {tekst::%loop-number%} is set:
+			if {lokalizacja::%loop-number%} is set:
+				new Hologram "%loop-number%"
+				"%{id::hologramy}%".change{"%{tekst::%{id::hologramy}%}%"}
+				"%loop-number%".display{"%{lokalizacja::%loop-number%}%"}
+				send "Pomyslnie zaladowano objekt %loop-number%." to console
+			else:
+				send "Lokalizacja objektu %loop-number% nie jest ustawiona." to console
+		else:
+			send "Tekst objektu %loop-number% nie jest ustawiony" to console
+	send "Zalodowano HOLOGRAMS." to console

@@ -8,6 +8,7 @@ command /hologram [<text>] [<text>] [<text>]:
 		if the argument 1 is "stworz":
 			if the argument 2 is set:
 				add 1 to {id::hologramy}
+				set {ID::thisHologram::%{lokalizacja::%{id::hologramy}%}%} to {id::hologramy}
 				set {tekst::%{id::hologramy}%} to the argument 2
 				set {lokalizacja::%{id::hologramy}%} to location of the player
 				new Hologram "%{id::hologramy}%"
@@ -41,6 +42,9 @@ command /hologram [<text>] [<text>] [<text>]:
 					if the argument 2 parsed as integer is between 1 and {id::hologramy}:
 						"%the argument 2%".destroy{}
 						"%the argument 2%".delete{}
+						clear {tekst::%the argument 2%}
+						clear {lokalizacja::%the argument 2%}
+						clear {ID::thisHologram::%{lokalizacja::%the argument 2%}%}
 						send "&8» &7Pomyslnie usunieto &3objekt&7." to the player
 					else:
 						send "&cNiestety, lecz lista hologramow nie posiada takiego ID" to the player

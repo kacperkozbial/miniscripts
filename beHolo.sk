@@ -9,50 +9,65 @@ command /beHapi:BeHolo [<text>] [<text>] [<text>]:
 			send coloured "&6/hologram edytujtekst <id> <tekst> &8- &7Edytuje tekst hologramu." to the player
 			send coloured "&6/hologram showlist &8- &7Wyswietla liste hologramow." to the player
 		if the argument 1 is "stworz":
-			if the argument 2 is set:
-				add 1 to {id::hologramy}
-				set {tekst::%{id::hologramy}%} to the argument 2
-				set {lokalizacja::%{id::hologramy}%} to location of the player
-				new Hologram "%{id::hologramy}%"
-				"%{id::hologramy}%".change{"%{tekst::%{id::hologramy}%}%"}
-				"%{id::hologramy}%".display{"%{lokalizacja::%{id::hologramy}%}%"}
-				send coloured "&7» &3Utworzyles nowy hologram&7." to the player
+			if player has permission "beHolo.create":
+				if the argument 2 is set:
+					add 1 to {id::hologramy}
+					set {tekst::%{id::hologramy}%} to the argument 2
+					set {lokalizacja::%{id::hologramy}%} to location of the player
+					new Hologram "%{id::hologramy}%"
+					"%{id::hologramy}%".change{"%{tekst::%{id::hologramy}%}%"}
+					"%{id::hologramy}%".display{"%{lokalizacja::%{id::hologramy}%}%"}
+					send coloured "&7» &3Utworzyles nowy hologram&7." to the player
+				else:
+					send coloured "&cNie podales tekstu" to the player
 			else:
-				send coloured "&cNie podales tekstu" to the player
-		if the argument 1 is "edytujtekst":
-			if the argument 2 is set:
-				if the argument 2 is integer:
-					if the argument 2 parsed as integer is between 1 and {id::hologramy}:
-						if the argument 3 parsed as text is set:
-							"%the argument 2 parsed as integer%".change{"%the argument 3%"}
-							"%the argument 2 parsed as integer%".display{"%{lokalizacja::%the argument 2%}%"}
-							send coloured "&7» &6Pomyslnie edytowano tekst" to the player
+				send coloured "&8» &cBrak uprawnien. &8(&6beHolo.create&8)" to the player
+		if the argument 1 is "edytujtekst" or "edytuj":
+			if player has permission "beHolo.edit":
+				if the argument 2 is set:
+					if the argument 2 is integer:
+						if the argument 2 parsed as integer is between 1 and {id::hologramy}:
+							if the argument 3 parsed as text is set:
+								"%the argument 2 parsed as integer%".change{"%the argument 3%"}
+								"%the argument 2 parsed as integer%".display{"%{lokalizacja::%the argument 2%}%"}
+								send coloured "&7» &6Pomyslnie edytowano tekst" to the player
+							else:
+								send coloured "&cNie podales tekstu" to the player
 						else:
-							send coloured "&cNie podales tekstu" to the player
+							send coloured "&cLista hologramow nie posiada takiego ID" to the player
 					else:
-						send coloured "&cLista hologramow nie posiada takiego ID" to the player
+						send coloured "&cNie ma nazw. Sa wylacznie ID" to the player
 				else:
-					send coloured "&cNie ma nazw. Sa wylacznie ID" to the player
+					send coloured "&cPodaj ID" to the player
 			else:
-				send coloured "&cPodaj ID" to the player
+				send coloured "&8» &cBrak uprawnien. &8(&6beHolo.edit&8)" to the player
 		if the argument 1 is "showlist":
-			send coloured "&8[&6» &3beHolo &6«&8] Przygotowuje liste Hologramow." to the player
-			wait 3 seconds
-			loop (size of {id::hologramy}) times:
-				send coloured "%loop-value%. %{tekst::%loop-value%}%" to the player
-		if the argument 1 is "usun":
-			if the argument 2 is set:
-				if the argument 2 is integer:
-					if the argument 2 parsed as integer is between 1 and {id::hologramy}:
-						"%the argument 2%".destroy{}
-						"%the argument 2%".delete{}
-						send coloured "&8» &7Pomyslnie usunieto &3objekt&7." to the player
-					else:
-						send coloured "&cNiestety, lecz lista hologramow nie posiada takiego ID" to the player
-				else:
-					send coloured "&cNie ma nazw. Sa wylacznie ID." to the player
+			if player has permission "beHolo.showlist":
+				send coloured "&8[&6» &3beHolo &6«&8] Przygotowuje liste Hologramow." to the player
+				wait 3 seconds
+				loop (size of {id::hologramy}) times:
+					send coloured "%loop-value%. %{tekst::%loop-value%}%" to the player
 			else:
-				send coloured "&cPodaj id hologramu." to the player
+				send coloured "&8» &cBrak uprawnien. &8(&6beHolo.showlist&8)" to the player
+		if the argument 1 is "usun":
+			if player has permission "beHolo.remove":
+				if the argument 2 is set:
+					if the argument 2 is integer:
+						if the argument 2 parsed as integer is between 1 and {id::hologramy}:
+							"%the argument 2%".destroy{}
+							"%the argument 2%".delete{}
+							send coloured "&8» &7Pomyslnie usunieto &3objekt&7." to the player
+						else:
+							send coloured "&cNiestety, lecz lista hologramow nie posiada takiego ID" to the player
+					else:
+						send coloured "&cNie ma nazw. Sa wylacznie ID." to the player
+				else:
+					send coloured "&cPodaj id hologramu." to the player
+			else:
+				send coloured "&8» &cBrak uprawnien. &8(&6beHolo.remove&8)" to the player
+		if the argument 1 is "autor or "author":
+			send coloured "&7Autorem skryptu jest &9beHapi" to the player
+			send coloured "&3Telegram&8: &7@behapi" to the player
 on script load:
 	message "[beHolo] Rozpoczeto ladowanie skryptu..." to console
 	if folder "plugins/beHolo" doesn't exists:

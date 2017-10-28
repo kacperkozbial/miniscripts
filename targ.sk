@@ -1,0 +1,103 @@
+# Skrypt pisany "na kolanie".
+
+# Tworca skryptu: KCPRRR / beHapi / Kacper K. ~ Miłego użytkowania!
+command /wystaw [<number>] [<number>]:
+	description: Wystaw przedmiot na targ!
+	trigger:
+		if argument 1 isn't set:
+			send coloured "&6/wystaw <ilosc> <cena> &7- &9Wystawia przedmiot na targ" to the player
+		if argument 1 is set:
+			if number-argument 1 <= amount of all player's tool in player's inventory:
+				if number-argument 2 is set:
+					add 1 to {targ::wystawioneprzedmioty::*}
+					set {targ::przedmiot::%{targ::wystawioneprzedmioty::*}%} to "%player's tool%" # Zmienna ustala przedmiot wystawiany
+					set {targ::ilosc::%{targ::wystawioneprzedmioty::*}%} to "%number-argument 1%" # Zmienna ustala ilosc przedmiotu
+					set {targ::cena::%{targ::wystawioneprzedmioty::*}%} to "%number-argument 2%" # Zmienna ustala cene przedmiotu
+					set {targ::wlasciciel::%{targ::wystawioneprzedmioty::*}%} to "%player%" # Zmienna ustala sprzedawce
+					send coloured "&7Wystawiles &6%player's tool%" to the player
+					send coloured "&7Cena: &3%{targ::cena::%{targ::wystawioneprzedmioty::*}%}%" to the player
+					send coloured "&7Ilosc: &3%{targ::cena::%{targ::wystawioneprzedmioty::*}%}%" to the player
+				else:
+					send coloured "&cPodaj cene przedmiotu" to the player
+			else:
+				send coloured "&cNie posiadasz tylu przedmiotow w ekwipunku!" to the player
+
+command /targ [<text>]:
+	description: Otwiera targ.
+	trigger:
+		set {_i} to {targ::wystawioneprzedmioty::*}
+		if {_i} = 9:
+			open chest with 1 rows named "&6Targ" to the player
+		if {_i} = 18:
+			open chest with 2 rows named "&6Targ" to the player
+		if {_i} = 27:
+			open chest with 3 rows named "&6Targ" to the player
+		if {_i} = 36:
+			open chest with 4 rows named "&6Targ" to the player
+		if {_i} = 45:
+			open chest with 5 rows named "&6Targ" to the player
+		if {_i} = 54:
+			open chest with 6 rows named "&6Targ" to the player
+		if name of player's current inventory is "&6Targ":
+			loop {_i} times:
+				wait 5 ticks
+				format slot loop-number - 1 with 1 of {targ::przedmiot::%{targ::wystawioneprzedmioty::*}%} parsed as item type with lore "Cena: zmienna||Ilosc: zmienna||Sprzedawca: zmienna" to close then run [make player execute command "buy %{targ::wystawioneprzedmioty::*}%"]
+
+command /sprawdz [<player>]:
+	description: Sprawdza wystawione przedmioty gracza.
+	trigger:
+		if player-argument is set:
+			set {_x} to {targ::wystawioneprzedmioty::*}
+			loop {_x} times:
+				if {targ::wlasciciel::%{_x}%} is "%player%":
+					add loop-number to {_y::%player-arg%}
+			if {_y::%player-arg%} > 1:
+				if {_y::%player-arg%} < 54:
+					open chest with 6 rows named "&7%player-arg%" to the player
+					loop {_y::%player-arg%} times:
+						format slot loop-number - 1 with 1 of {targ::przedmiot::%{_y::%player-arg%}%} parsed as item type with lore "Cena: %{targ::cena::%{_y::%player-arg%}%||Ilosc: %{targ::ilosc::%{_y::%player-arg%}%}%||Sprzedawca: %player-argument%}%" to close then run [make player execute command "buy %{_y::%player-arg%}%"]
+				else:
+					send "&cError." to the player
+			else:
+				send "&4Ten gracz nie posiada zadnych przedmiotow" to the player
+		else:
+			send "&cPodaj nick gracza." to the player
+
+command /buy [<number>]:
+	description: Zakup konkretny przedmiot znajac jego id.
+	trigger:
+		if number-argument is set:
+			if {targ::przedmiot::%number-argument%} is set:
+				if {targ::ilosc::%number-argument%} is set:
+					if {targ::cena::%number-argument%} is set:
+						if player's balance >= {targ::cena::%number-argument%}:
+							set {_giveItem} to "%{targ::ilosc::%number-argument%}% %{targ::przedmiot::%number-argument%}%"
+							give {_giveItem} parsed as item type to the player
+							remove {targ::cena::%number-argument%} from player's balance
+							add {targ::cena::%number-argument%} to {targ::wlasciciel::%number-argument%}'s account
+							send "&aGratulujemy! Zakupiles przedmiot." to the player
+							wf "Sprzedaz" to "plugins/Targ/sprzedaz.yml"
+							wf "ID: %loop-number%" to "plugins/Targ/sprzedaz.yml"
+							wf "Sprzedawca: %{targ::wlasciciel::%number-argument%}%" to "plugins/Targ/sprzedaz.yml"
+							wf "Przedmiot: %{targ::przedmiot::%number-argument%}%" to "plugins/Targ/sprzedaz.yml"
+							wf "Cena: %{targ::cena::%number-argument%}%" to "plugins/Targ/sprzedaz.yml"
+							wf "Ilosc: %{targ::ilosc::%number-argument%}" to "plugins/Targ/sprzedaz.yml"
+							wf ".. KONIEC %number-argument% .." to "plugins/Targ/sprzedaz.yml"
+							wf "" to "plugins/Targ/sprzedaz.yml"
+							clear {targ::przedmiot::%number-argument%}
+							clear {targ::ilosc::%number-argument%}
+							clear {targ::cena::%number-argument%}
+							clear {targ::wlasciciel::%number-argument%}
+							clear {targ::wystawioneprzedmioty::%number-argument%}
+						else:
+							send "&cNie posiadasz tyle pieniedzy!" to the player
+					else:
+						send "&cTen przedmiot nie posiada ceny. &4[ERROR]" to the player
+				else:
+					send "&cTen przedmiot nie ma podanej ilosci. &4[ERROR]" to the player
+			else:
+				send "&cAn error cos tam occured... XD" to the player
+				send "&4Po prostu blad! &7Zglos to do administracji!" to the player
+				send "&3Pomoc techniczna &8- &6@beHapi &7Telegram" to the player
+		else:
+			send "&cId nie dziala." to the player
